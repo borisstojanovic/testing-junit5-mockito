@@ -23,7 +23,7 @@ class SpecialitySDJpaServiceTest {
     SpecialitySDJpaService service;
 
     @Test
-    void findByIdTest() {
+    void testFindById() {
         Speciality speciality = new Speciality();
 
         when(specialtyRepository.findById(1L))
@@ -34,6 +34,20 @@ class SpecialitySDJpaServiceTest {
         assertThat(foundSpeciality).isNotNull();
 
         verify(specialtyRepository).findById(1L);
+    }
+
+    @Test
+    void testFindByIdAnyLong() {
+        Speciality speciality = new Speciality();
+
+        when(specialtyRepository.findById(1L))
+                .thenReturn(Optional.of(speciality));
+
+        Speciality foundSpeciality = service.findById(1L);
+
+        assertThat(foundSpeciality).isNotNull();
+
+        verify(specialtyRepository).findById(anyLong());
     }
 
     @Test
@@ -75,5 +89,14 @@ class SpecialitySDJpaServiceTest {
     @Test
     void testDelete() {
         service.delete(new Speciality());
+    }
+
+    @Test
+    void testDeleteByObject() {
+        Speciality speciality = new Speciality();
+
+        service.delete(speciality);
+
+        verify(specialtyRepository).delete(any(Speciality.class));
     }
 }
